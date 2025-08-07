@@ -1,6 +1,7 @@
-import { d } from 'node_modules/@react-router/dev/dist/routes-DHIOx0R9';
+
 import React, { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router';
+import FileUploader from '~/components/FileUploader';
 import Navbar from '~/components/Navbar'
 import { prepareInstructions } from '~/constants';
 import { convertPdfToImage } from '~/lib/pdf2img';
@@ -19,7 +20,6 @@ const upload = () => {
     const handleFileSelect = (file: File | null ) =>{
         setFile(file);
     }
-
 
     const handleAnalyze = async({companyName , jobTitle, jobDescription, file}:{companyName:string,
         jobTitle: string, jobDescription : string , file : File
@@ -71,7 +71,7 @@ const upload = () => {
     }
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>)=>{
-        e.preventDefault();
+        e.preventDefault(); //prevent reload
         
         const form = e.currentTarget.closest('form');
         if(!form) return;
@@ -80,6 +80,10 @@ const upload = () => {
         const companyName = formData.get('company-name') as string;
         const jobTitle = formData.get('job-title') as string;
         const jobDescription = formData.get('job-description') as string;
+
+        console.log({
+            companyName,jobDescription,jobTitle,file
+        })
 
         if(!file) return;
 
@@ -123,8 +127,9 @@ const upload = () => {
                         <textarea rows={5} name='job-description' placeholder='Job Description' id='job-description'/>
                     </div>
 
-                    <div>
+                    <div className='form-div'>
                         <label htmlFor='uploader'>Upload Resume</label>
+                        <FileUploader onFileSelect={handleFileSelect}/>
                         
 
                     </div>
